@@ -301,7 +301,7 @@ void transactionMenu() {
 	cout << "[4] Main Menu." << endl;
 }
 
-bool depositeBalance(double depositeAmount, vector<acountInfo>acounts, string acountNumber) {
+bool depositeBalance(double depositeAmount, vector<acountInfo>&acounts, string acountNumber) {
 	char answer = 'n';
 	cout << "Are you sure you want perform this transactin? [y/n] ?";
 	cin >> answer;
@@ -352,6 +352,9 @@ void showTotalBalances(vector<acountInfo>acounts) {
 	cout << "|  " << left << setw(20) << "Balance" << endl;
 	cout << endl;
 	double totalBalances = 0;
+	if (acounts.size() == 0) {
+		cout << "No Clients available now" << endl;
+	}
 	for (acountInfo acount : acounts) {
 		printTotalBalances(acount);
 		totalBalances += acount.balance;
@@ -361,13 +364,13 @@ void showTotalBalances(vector<acountInfo>acounts) {
 }
 
 void goBackToTransactionMenu() {
-	cout << "Press eny key to go back menu" << endl;
+	cout << "Press eny key to go back transactions menu" << endl;
 	system("pause > 0");
 	transactionMenu();
 }
 
 void goBackMainMenu() {
-	cout << "Press eny key to go back menu" << endl;
+	cout << "Press eny key to go back main menu" << endl;
 	system("pause>0");
 	menu();
 }
@@ -409,7 +412,12 @@ void withdrawPerformance(vector<acountInfo>&acounts) {
 		printClientData(acount);
 		cout << "Please Enter withdraw amount? ";
 		cin >> amount;
-		if (withdraw(acounts, acountNumber, amount)) {
+		while (amount > acount.balance) {
+			cout << "Amount exceed balance " << endl;
+			cout << "Please Enter another amount " << endl;
+				cin >> amount;
+		}
+		if (depositeBalance(- amount,acounts,acountNumber)) {
 			cout << "Done Successfuly" << endl;
 
 	}
@@ -439,7 +447,7 @@ void transactonMenuPerformance(vector<acountInfo>&acounts) {
 			break;
 		}
 		case'4': {
-			showEndScreen();
+			menu();
 			break;
 		}
 		}
@@ -503,7 +511,7 @@ int main() {
 			break;
 		case'6': {
 			transactonMenuPerformance(acounts);
-			goBackMainMenu();
+			//goBackMainMenu();
 			break;
 		}
 		case'7': {
