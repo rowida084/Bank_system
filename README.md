@@ -332,7 +332,9 @@ void deposite(vector<acountInfo> & acounts) {
 	printClientData(acount);
 	cout << "Please Enter deposite amount? ";
 	cin >> depositeAmount;
-	depositeBalance(depositeAmount, acounts, acountNumber);
+	if (depositeBalance(depositeAmount, acounts, acountNumber)) {
+		cout << "Done Successfuly" << endl;
+	}
 	
 
 }
@@ -407,7 +409,10 @@ void withdrawPerformance(vector<acountInfo>&acounts) {
 		printClientData(acount);
 		cout << "Please Enter withdraw amount? ";
 		cin >> amount;
-		withdraw(acounts, acountNumber, amount);
+		if (withdraw(acounts, acountNumber, amount)) {
+			cout << "Done Successfuly" << endl;
+
+	}
 }
 
 void transactonMenuPerformance(vector<acountInfo>&acounts) {
