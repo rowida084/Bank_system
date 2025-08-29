@@ -198,7 +198,7 @@ void addMoreClients(vector<acountInfo>& acounts) {
 
 bool  findClientNumber(string acountNumber, vector<acountInfo>& Vacounts, acountInfo& acount) {
 	for (acountInfo& c : Vacounts) {
-		if (acountNumber == c.acountNumber) {
+		if (acountNumber == c.acountNumber && !c.deleted) {
 			acount = c;
 			return true;
 		}
@@ -240,10 +240,10 @@ void deleteAcount(string acountNumber, vector<acountInfo>& acounts) {
 		cin >> answer;
 		if (answer == 'y' || answer == 'Y') {
 			markClientDeleted(acounts, acountNumber);
-			//saveVectorToFile(acounts);
+			saveVectorToFile(acounts);
 			cout << "The acount is deleted successfuly." << endl;
 		}
-		saveVectorToFile(acounts);
+		//saveVectorToFile(acounts);
 
 	}
 	else {
@@ -303,10 +303,9 @@ bool depositeBalance(double depositeAmount, vector<acountInfo>& acounts, string 
 	cout << "Are you sure you want perform this transactin? [y/n] ?";
 	cin >> answer;
 	if (answer == 'y' || answer == 'Y') {
-		for (acountInfo& c : acounts) {
-			if (acountNumber == c.acountNumber) {
+		for (acountInfo& c : acounts  ) {
+			if (acountNumber == c.acountNumber && c.deleted == false) {
 				c.balance += depositeAmount;
-				//	saveVectorToFile(acounts);
 				return true;
 			}
 		}
@@ -315,12 +314,9 @@ bool depositeBalance(double depositeAmount, vector<acountInfo>& acounts, string 
 }
 
 void deposite(vector<acountInfo>& acounts) {
-	/*vector<acountInfo> acounts;
-	acounts = loadAcountsInfoFromFile();*/
 	string acountNumber;
 	double depositeAmount = 0;
 	acountInfo acount;
-	cout << "Please Enter AcountNumber?";
 	acountNumber = readAcountNumber();
 	while (!findClientNumber(acountNumber, acounts, acount)) {
 		cout << "This acount does not exist" << endl;
@@ -332,7 +328,8 @@ void deposite(vector<acountInfo>& acounts) {
 	if (depositeBalance(depositeAmount, acounts, acountNumber)) {
 		cout << "Done Successfuly" << endl;
 	}
-
+	findClientNumber(acountNumber, acounts, acount);
+	printClientData(acount);
 
 }
 
@@ -418,6 +415,8 @@ void withdrawPerformance(vector<acountInfo>& acounts) {
 		cout << "Done Successfuly" << endl;
 
 	}
+	findClientNumber(acountNumber, acounts, acount);
+	printClientData(acount);
 }
 
 void transactonMenuPerformance(vector<acountInfo>& acounts) {
@@ -520,4 +519,6 @@ int main() {
 		cin >> answer;
 	} while (answer == 'y' || answer == 'Y');
 	saveVectorToFile(acounts);
+	system("pause");
+	return 0;
 }
