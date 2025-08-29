@@ -246,11 +246,11 @@ void deleteAcount(string acountNumber, vector<acountInfo>& acounts) {
 		if (answer == 'y' || answer == 'Y') {
 			markClientDeleted(acounts, acountNumber);
 			saveVectorToFile(acounts);
-			cout << "/n/nThe acount is deleted successfuly./n/n";
+			cout << "The acount is deleted successfuly."<<endl;
 		}
 	}
 	else {
-		cout << "/n/nThis acount with " << acountNumber << " does not exist/n/n";
+		cout << "This acount with " << acountNumber << " does not exist";
 	}
 }
 
@@ -279,7 +279,7 @@ void updateClient(string acountNumber, vector<acountInfo>acounts) {
 			for (acountInfo& c : acounts) {
 				if (c.acountNumber == acountNumber) {
 					c = readUpdateClientInfo(acountNumber);
-				}break;
+				}//break;
 			}
 
 			saveVectorToFile(acounts);
@@ -301,7 +301,7 @@ void transactionMenu() {
 	cout << "[4] Main Menu." << endl;
 }
 
-bool depositeBalance(double depositeAmount, vector<acountInfo>&acounts, string acountNumber) {
+bool depositeBalance(double depositeAmount, vector<acountInfo>& acounts, string acountNumber) {
 	char answer = 'n';
 	cout << "Are you sure you want perform this transactin? [y/n] ?";
 	cin >> answer;
@@ -317,11 +317,11 @@ bool depositeBalance(double depositeAmount, vector<acountInfo>&acounts, string a
 	return false;
 }
 
-void deposite(vector<acountInfo> & acounts) {
+void deposite(vector<acountInfo>& acounts) {
 	/*vector<acountInfo> acounts;
 	acounts = loadAcountsInfoFromFile();*/
 	string acountNumber;
-	double depositeAmount=0;
+	double depositeAmount = 0;
 	acountInfo acount;
 	cout << "Please Enter AcountNumber?";
 	acountNumber = readAcountNumber();
@@ -335,7 +335,7 @@ void deposite(vector<acountInfo> & acounts) {
 	if (depositeBalance(depositeAmount, acounts, acountNumber)) {
 		cout << "Done Successfuly" << endl;
 	}
-	
+
 
 }
 
@@ -382,14 +382,14 @@ void showEndScreen() {
 
 }
 
-bool withdraw(vector<acountInfo> &acounts,string acountNumber,double amount ) {
+bool withdraw(vector<acountInfo>& acounts, string acountNumber, double amount) {
 	char answer = 'n';
 	cout << "Are you sure you want perform this transactin? [y/n] ?";
 	cin >> answer;
 	if (answer == 'y' || answer == 'Y') {
 		for (acountInfo& c : acounts) {
-			if (acountNumber == c.acountNumber&&amount<= c.balance) {
-				c.balance += amount ;
+			if (acountNumber == c.acountNumber && amount <= c.balance) {
+				c.balance += amount;
 				saveVectorToFile(acounts);
 				return true;
 			}
@@ -398,32 +398,32 @@ bool withdraw(vector<acountInfo> &acounts,string acountNumber,double amount ) {
 	return false;
 }
 
-void withdrawPerformance(vector<acountInfo>&acounts) {
-		/*vector<acountInfo> acounts;
-		acounts = loadAcountsInfoFromFile();*/
-		string acountNumber;
-		double amount = 0;
-		acountInfo acount;
+void withdrawPerformance(vector<acountInfo>& acounts) {
+	/*vector<acountInfo> acounts;
+	acounts = loadAcountsInfoFromFile();*/
+	string acountNumber;
+	double amount = 0;
+	acountInfo acount;
+	acountNumber = readAcountNumber();
+	while (!findClientNumber(acountNumber, acounts, acount)) {
+		cout << "This acount does not exist" << endl;
 		acountNumber = readAcountNumber();
-		while (!findClientNumber(acountNumber, acounts, acount)) {
-			cout << "This acount does not exist" << endl;
-			acountNumber = readAcountNumber();
-		}
-		printClientData(acount);
-		cout << "Please Enter withdraw amount? ";
+	}
+	printClientData(acount);
+	cout << "Please Enter withdraw amount? ";
+	cin >> amount;
+	while (amount > acount.balance) {
+		cout << "Amount exceed balance " << endl;
+		cout << "Please Enter another amount " << endl;
 		cin >> amount;
-		while (amount > acount.balance) {
-			cout << "Amount exceed balance " << endl;
-			cout << "Please Enter another amount " << endl;
-				cin >> amount;
-		}
-		if (depositeBalance(- amount,acounts,acountNumber)) {
-			cout << "Done Successfuly" << endl;
+	}
+	if (depositeBalance(-amount, acounts, acountNumber)) {
+		cout << "Done Successfuly" << endl;
 
 	}
 }
 
-void transactonMenuPerformance(vector<acountInfo>&acounts) {
+void transactonMenuPerformance(vector<acountInfo>& acounts) {
 	char choose;
 	transactionMenu();
 	char answer = 'y';
