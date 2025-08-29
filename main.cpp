@@ -113,7 +113,7 @@ void printClientData(acountInfo acount) {
 	cout << endl;
 }
 
-void showClientsInfo(vector<acountInfo>acounts) {
+void showClientsInfo(vector<acountInfo>&acounts) {
 	cout << "|  " << left << setw(20) << "Acount number";
 	cout << "|  " << left << setw(20) << "Pin code";
 	cout << "|  " << left << setw(20) << "Name";
@@ -121,19 +121,14 @@ void showClientsInfo(vector<acountInfo>acounts) {
 	cout << "|  " << left << setw(20) << "Balance" << endl;
 	cout << endl;
 	for (acountInfo acount : acounts) {
-		printClientData(acount);
-		cout << endl;
+		if (!acount.deleted) {
+			printClientData(acount);
+			cout << endl;
+		}
 	}
 }
 
 
-void loadFile(vector<acountInfo> acounts, string fileName) {
-	fstream dataFile;
-	dataFile.open("dataFile.txt", ios::in);
-	if (dataFile.is_open()) {
-
-	}
-}
 
 acountInfo  readClient() {
 	acountInfo acount;
@@ -180,7 +175,7 @@ void addClient(vector<acountInfo>& acounts) {
 	acountInfo acount;
 	acount = readAcount(acounts);
 	acounts.push_back(acount);
-	saveVectorToFile(acounts);
+	//saveVectorToFile(acounts);
 
 }
 
@@ -214,7 +209,7 @@ bool  findClientNumber(string acountNumber, vector<acountInfo>& Vacounts, acount
 
 void showAcountDetailsByAcountNumber(vector<acountInfo>& acounts, string acountNumber) {
 	acountInfo acount;
-	acounts = loadAcountsInfoFromFile();
+	//acounts = loadAcountsInfoFromFile();
 	//showClientsInfo(acounts);
 
 	if (findClientNumber(acountNumber, acounts, acount)) {
@@ -228,7 +223,7 @@ void showAcountDetailsByAcountNumber(vector<acountInfo>& acounts, string acountN
 
 bool  markClientDeleted(vector<acountInfo>& acounts, string acountNumber) {
 	for (acountInfo& client : acounts) {
-		if (findClientNumber(acountNumber, acounts, client)) {
+		if (client.acountNumber == acountNumber) {
 			client.deleted = true;
 			return true;
 		}
@@ -245,9 +240,11 @@ void deleteAcount(string acountNumber, vector<acountInfo>& acounts) {
 		cin >> answer;
 		if (answer == 'y' || answer == 'Y') {
 			markClientDeleted(acounts, acountNumber);
-			saveVectorToFile(acounts);
-			cout << "The acount is deleted successfuly."<<endl;
+			//saveVectorToFile(acounts);
+			cout << "The acount is deleted successfuly." << endl;
 		}
+		saveVectorToFile(acounts);
+
 	}
 	else {
 		cout << "This acount with " << acountNumber << " does not exist";
@@ -268,7 +265,7 @@ acountInfo readUpdateClientInfo(string acountNumber) {
 	return client;
 }
 
-void updateClient(string acountNumber, vector<acountInfo>acounts) {
+void updateClient(string acountNumber, vector<acountInfo>&acounts) {
 	char answer = 'n';
 	acountInfo client;
 	if (findClientNumber(acountNumber, acounts, client)) {
@@ -282,7 +279,7 @@ void updateClient(string acountNumber, vector<acountInfo>acounts) {
 				}//break;
 			}
 
-			saveVectorToFile(acounts);
+			//	saveVectorToFile(acounts);
 			cout << "client is updated succissfully" << endl;
 		}
 	}
@@ -309,7 +306,7 @@ bool depositeBalance(double depositeAmount, vector<acountInfo>& acounts, string 
 		for (acountInfo& c : acounts) {
 			if (acountNumber == c.acountNumber) {
 				c.balance += depositeAmount;
-				saveVectorToFile(acounts);
+				//	saveVectorToFile(acounts);
 				return true;
 			}
 		}
@@ -346,7 +343,7 @@ void printTotalBalances(acountInfo acount) {
 	cout << endl;
 }
 
-void showTotalBalances(vector<acountInfo>acounts) {
+void showTotalBalances(vector<acountInfo>&acounts) {
 	cout << "|  " << left << setw(20) << "Acount number";
 	cout << "|  " << left << setw(20) << "Name";
 	cout << "|  " << left << setw(20) << "Balance" << endl;
@@ -390,7 +387,7 @@ bool withdraw(vector<acountInfo>& acounts, string acountNumber, double amount) {
 		for (acountInfo& c : acounts) {
 			if (acountNumber == c.acountNumber && amount <= c.balance) {
 				c.balance += amount;
-				saveVectorToFile(acounts);
+				//	saveVectorToFile(acounts);
 				return true;
 			}
 		}
@@ -522,4 +519,5 @@ int main() {
 		cout << "Do you want do another operation? ";
 		cin >> answer;
 	} while (answer == 'y' || answer == 'Y');
+	saveVectorToFile(acounts);
 }
