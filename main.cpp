@@ -3,6 +3,7 @@
 #include<vector>
 #include<fstream>
 #include<iomanip>
+
 using namespace std;
 struct acountInfo {
 	string acountNumber;
@@ -16,6 +17,8 @@ enum enMenuOptions {
 	showClientList = 1, addNewClient = 2, deleteClient = 3, updataClientInfo = 4,
 	findClient = 5, exist = 6
 };
+void mainMenu(vector<acountInfo> acounts);
+void transactonMenuPerformance(vector<acountInfo>& acounts);
 
 string convertToString(acountInfo acount, string delim) {
 	string s = "";
@@ -113,7 +116,7 @@ void printClientData(acountInfo acount) {
 	cout << endl;
 }
 
-void showClientsInfo(vector<acountInfo>&acounts) {
+void showClientsInfo(vector<acountInfo>& acounts) {
 	cout << "|  " << left << setw(20) << "Acount number";
 	cout << "|  " << left << setw(20) << "Pin code";
 	cout << "|  " << left << setw(20) << "Name";
@@ -175,7 +178,6 @@ void addClient(vector<acountInfo>& acounts) {
 	acountInfo acount;
 	acount = readAcount(acounts);
 	acounts.push_back(acount);
-	//saveVectorToFile(acounts);
 
 }
 
@@ -209,8 +211,7 @@ bool  findClientNumber(string acountNumber, vector<acountInfo>& Vacounts, acount
 
 void showAcountDetailsByAcountNumber(vector<acountInfo>& acounts, string acountNumber) {
 	acountInfo acount;
-	//acounts = loadAcountsInfoFromFile();
-	//showClientsInfo(acounts);
+	
 
 	if (findClientNumber(acountNumber, acounts, acount)) {
 		cout << "The following are client details: " << endl;
@@ -243,7 +244,7 @@ void deleteAcount(string acountNumber, vector<acountInfo>& acounts) {
 			saveVectorToFile(acounts);
 			cout << "The acount is deleted successfuly." << endl;
 		}
-		//saveVectorToFile(acounts);
+		
 
 	}
 	else {
@@ -265,7 +266,7 @@ acountInfo readUpdateClientInfo(string acountNumber) {
 	return client;
 }
 
-void updateClient(string acountNumber, vector<acountInfo>&acounts) {
+void updateClient(string acountNumber, vector<acountInfo>& acounts) {
 	char answer = 'n';
 	acountInfo client;
 	if (findClientNumber(acountNumber, acounts, client)) {
@@ -276,10 +277,9 @@ void updateClient(string acountNumber, vector<acountInfo>&acounts) {
 			for (acountInfo& c : acounts) {
 				if (c.acountNumber == acountNumber) {
 					c = readUpdateClientInfo(acountNumber);
-				}//break;
+				}
 			}
 
-			//	saveVectorToFile(acounts);
 			cout << "client is updated succissfully" << endl;
 		}
 	}
@@ -303,7 +303,7 @@ bool depositeBalance(double depositeAmount, vector<acountInfo>& acounts, string 
 	cout << "Are you sure you want perform this transactin? [y/n] ?";
 	cin >> answer;
 	if (answer == 'y' || answer == 'Y') {
-		for (acountInfo& c : acounts  ) {
+		for (acountInfo& c : acounts) {
 			if (acountNumber == c.acountNumber && c.deleted == false) {
 				c.balance += depositeAmount;
 				return true;
@@ -340,7 +340,7 @@ void printTotalBalances(acountInfo acount) {
 	cout << endl;
 }
 
-void showTotalBalances(vector<acountInfo>&acounts) {
+void showTotalBalances(vector<acountInfo>& acounts) {
 	cout << "|  " << left << setw(20) << "Acount number";
 	cout << "|  " << left << setw(20) << "Name";
 	cout << "|  " << left << setw(20) << "Balance" << endl;
@@ -384,7 +384,7 @@ bool withdraw(vector<acountInfo>& acounts, string acountNumber, double amount) {
 		for (acountInfo& c : acounts) {
 			if (acountNumber == c.acountNumber && amount <= c.balance) {
 				c.balance += amount;
-				//	saveVectorToFile(acounts);
+				
 				return true;
 			}
 		}
@@ -393,8 +393,7 @@ bool withdraw(vector<acountInfo>& acounts, string acountNumber, double amount) {
 }
 
 void withdrawPerformance(vector<acountInfo>& acounts) {
-	/*vector<acountInfo> acounts;
-	acounts = loadAcountsInfoFromFile();*/
+	
 	string acountNumber;
 	double amount = 0;
 	acountInfo acount;
@@ -419,11 +418,80 @@ void withdrawPerformance(vector<acountInfo>& acounts) {
 	printClientData(acount);
 }
 
-void transactonMenuPerformance(vector<acountInfo>& acounts) {
+void mainMenu(vector<acountInfo>acounts)
+{
 	char choose;
-	transactionMenu();
+
+
 	char answer = 'y';
 	do {
+		menu();
+
+		cout << "Choose what do you want to do? [1 to 7 ]";
+		cin >> choose;
+		switch (choose) {
+		case '1':
+			showClientsInfo(acounts);
+			
+
+			break;
+
+		case '2':
+			cout << "------------------------------------------" << endl;
+			cout << "         Adding new client screen:               " << endl;
+			cout << "------------------------------------------" << endl;
+			addMoreClients(acounts);
+			
+
+			break;
+
+		case'3':
+			cout << "------------------------------------------" << endl;
+			cout << "              Delete client screen:         " << endl;
+			cout << "------------------------------------------" << endl;
+
+			deleteAcount(readAcountNumber(), acounts);
+		
+
+			break;
+
+		case'4':
+			cout << "------------------------------------------" << endl;
+			cout << "              Update client screen             " << endl;
+			cout << "------------------------------------------" << endl;
+			updateClient(readAcountNumber(), acounts);
+			
+			break;
+
+		case'5':
+			cout << "------------------------------------------" << endl;
+			cout << "           Find client screen                 " << endl;
+			cout << "------------------------------------------" << endl;
+			showAcountDetailsByAcountNumber(acounts, readAcountNumber());
+			
+			break;
+		case'6': {
+			transactonMenuPerformance(acounts);
+			
+
+			break;
+		}
+		case'7': {
+			showEndScreen();
+
+		}
+		}
+		cout << "Do you want do another main operation? ";
+		cin >> answer;
+	} while (answer == 'y' || answer == 'Y');
+}
+
+void transactonMenuPerformance(vector<acountInfo>& acounts) {
+	char choose;
+	char answer = 'y';
+	do {
+		transactionMenu();
+
 		cout << "Choose what do you want to do?[1 to 4]?";
 		cin >> choose;
 		switch (choose) {
@@ -443,82 +511,20 @@ void transactonMenuPerformance(vector<acountInfo>& acounts) {
 			break;
 		}
 		case'4': {
-			menu();
-			break;
+			return;
 		}
 		}
-		cout << "Do you want do another operation? ";
+		cout << "Do you want do another Transaction operation? ";
 		cin >> answer;
 	} while (answer == 'y' || answer == 'Y');
 }
 
+
 int main() {
 	vector<acountInfo> acounts;
 	acounts = loadAcountsInfoFromFile();
-	char choose;
-
-
-	char answer = 'y';
-	do {
-		menu();
-
-		cout << "Choose what do you want to do? [1 to 7 ]";
-		cin >> choose;
-		switch (choose) {
-		case '1':
-			showClientsInfo(acounts);
-			//goBackMainMenu();
-
-			break;
-
-		case '2':
-			cout << "------------------------------------------" << endl;
-			cout << "         Adding new client screen:               " << endl;
-			cout << "------------------------------------------" << endl;
-			addMoreClients(acounts);
-			//goBackMainMenu();
-
-			break;
-
-		case'3':
-			cout << "------------------------------------------" << endl;
-			cout << "              Delete client screen:         " << endl;
-			cout << "------------------------------------------" << endl;
-
-			deleteAcount(readAcountNumber(), acounts);
-			//goBackMainMenu();
-
-			break;
-
-		case'4':
-			cout << "------------------------------------------" << endl;
-			cout << "              Update client screen             " << endl;
-			cout << "------------------------------------------" << endl;
-			updateClient(readAcountNumber(), acounts);
-			//goBackMainMenu();
-			break;
-
-		case'5':
-			cout << "------------------------------------------" << endl;
-			cout << "           Find client screen                 " << endl;
-			cout << "------------------------------------------" << endl;
-			showAcountDetailsByAcountNumber(acounts, readAcountNumber());
-			//goBackMainMenu();
-			break;
-		case'6': {
-			transactonMenuPerformance(acounts);
-			//goBackMainMenu();
-			break;
-		}
-		case'7': {
-			return 0;
-			break;
-		}
-		}
-		cout << "Do you want do another operation? ";
-		cin >> answer;
-	} while (answer == 'y' || answer == 'Y');
+	mainMenu(acounts);
 	saveVectorToFile(acounts);
-	system("pause");
+	system("pause>0");
 	return 0;
 }
