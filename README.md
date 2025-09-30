@@ -48,6 +48,3 @@ Functions
 File Handling
 
 
-
-
-Follow the on-screen menu to manage clients and users.
