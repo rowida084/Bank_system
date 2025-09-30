@@ -48,22 +48,4 @@ Functions
 
 File Handling
 
-▶️ How to Run
 
-Clone this repository:
-
-git clone https://github.com/your-username/Bank-Management.git
-cd Bank-Management
-
-
-Compile the code (using g++):
-
-g++ main.cpp -o bank
-
-
-Run the program:
-
-./bank
-
-
-Follow the on-screen menu to manage clients and users.
