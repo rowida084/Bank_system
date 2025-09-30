@@ -18,7 +18,7 @@ struct acountInfo {
 struct userInfo {
 	string userName;
 	string password;
-	int permission=-1;
+	int permission = -1;
 	bool deleted = 0;
 };
 
@@ -26,24 +26,24 @@ userInfo currentUser;
 
 enum enMenuOptions {
 	enShowClientListOption = 1, enAddNewClientOption = 2, enDeleteClientOption = 3,
-	enUpdataClientInfoOption = 4,enFindClientOption = 5,
-	enShowTransactionMenuOption=6,enManageUsersOption=7,enLogout=8
+	enUpdataClientInfoOption = 4, enFindClientOption = 5,
+	enShowTransactionMenuOption = 6, enManageUsersOption = 7, enLogout = 8
 };
 
 enum enTransactions {
-	enDeposite=1,enWithdraw=2,enShowTotalBalance=3,enShowMainMenu=4
+	enDeposite = 1, enWithdraw = 2, enShowTotalBalance = 3, enShowMainMenu = 4
 };
 
 enum enManageUserMenuOption {
 	enShowUserList = 1, enAddNewUser = 2, enDeleteUser = 3, enUpdateUser = 4,
- enFindUser = 5, enMainMenu = 6
+	enFindUser = 5, enMainMenu = 6
 };
 
 int currentPermission = 0;
 
-enum enPermissions { 
+enum enPermissions {
 	all = -1, enClientListPermission = 1, enAddNewClientPermission = 2, enDeleteClientPermission = 4,
-	enUpdateClientPermission = 8, enFindClientPermission = 16, 
+	enUpdateClientPermission = 8, enFindClientPermission = 16,
 	enShowTransactionMenuPermission = 32, enManageUsersPermission = 64
 };
 
@@ -53,20 +53,20 @@ void showMainMenu(vector<acountInfo>& acounts, vector<userInfo>& users);
 
 void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo>& acounts, vector<userInfo>& users);
 
-void showManageUserScreen(vector<userInfo>&users,vector<acountInfo>&acounts);
+void showManageUserScreen(vector<userInfo>& users, vector<acountInfo>& acounts);
 
-void login(vector<acountInfo>&acounts,vector<userInfo>&users);
+void login(vector<acountInfo>& acounts, vector<userInfo>& users);
 
 bool checkAccessPermission(enPermissions permossion);
 
 void showAccessDenied();
 
-void showTransactionMenu(vector<acountInfo>& acounts, vector<userInfo> & users);
+void showTransactionMenu(vector<acountInfo>& acounts, vector<userInfo>& users);
 
 void transactionMenuPerformance(enTransactions performTransactionMenuOption,
-	vector<acountInfo>& acounts, vector<userInfo> &users);
+	vector<acountInfo>& acounts, vector<userInfo>& users);
 
-bool findUserNameFromFile(string userName); 
+bool findUserNameFromFile(string userName);
 
 
 string convertToString(acountInfo acount, string delim) {
@@ -105,11 +105,11 @@ void saveVectorToFile(vector<acountInfo>& acounts) {
 void saveUsersVectorToFile(vector<userInfo>& users) {
 	fstream userFile;
 	string line;
-	userFile.open("userFile.txt",ios::out);
+	userFile.open("userFile.txt", ios::out);
 	if (userFile.is_open()) {
 		for (userInfo& user : users) {
 			if (user.deleted == false) {
-			line =	convertUserLineToString(user, "#//#");
+				line = convertUserLineToString(user, "#//#");
 				userFile << line << endl;
 			}
 		}
@@ -153,7 +153,7 @@ userInfo convertLineOfUserToVector(string line, string delim = "#//#") {
 	users = split(delim, line);
 	user.userName = users[0];
 	user.password = users[1];
-	user.permission =  stoi( users[2]);
+	user.permission = stoi(users[2]);
 	return user;
 }
 
@@ -264,7 +264,7 @@ int readPermissionsToSet() {
 void showClientsInfo(vector<acountInfo>& acounts) {
 
 	if (!checkAccessPermission(enPermissions::enClientListPermission)) {
-	
+
 		showAccessDenied();
 		return;
 
@@ -281,7 +281,7 @@ void showClientsInfo(vector<acountInfo>& acounts) {
 		cout << "No clients available in the system!" << endl;
 	}
 
-	for (acountInfo & acount : acounts) {
+	for (acountInfo& acount : acounts) {
 		if (!acount.deleted) {
 			printClientData(acount);
 			cout << endl;
@@ -292,7 +292,7 @@ void showClientsInfo(vector<acountInfo>& acounts) {
 void showUsersInfo(vector<userInfo>users) {
 	cout << "|  " << left << setw(20) << "User Name";
 	cout << "|  " << left << setw(20) << "Password";
-	cout << "|  " << left << setw(20) << "Permissionas "<<endl;
+	cout << "|  " << left << setw(20) << "Permissionas " << endl;
 	cout << endl;
 
 	if (users.size() == 0) {
@@ -337,10 +337,10 @@ userInfo readUser(vector<userInfo>users) {
 	cout << "Enter user name : " << endl;
 	getline(cin >> ws, user.userName);
 
-while (findUserNameFromFile(user.userName)) {
-cout << "User with user name " << user.userName 
-<< " already exist,Enter another username." << endl;
-getline(cin >> ws, user.userName);
+	while (findUserNameFromFile(user.userName)) {
+		cout << "User with user name " << user.userName
+			<< " already exist,Enter another username." << endl;
+		getline(cin >> ws, user.userName);
 	}
 
 	cout << "Enter password  : " << endl;
@@ -459,14 +459,23 @@ bool findUserByUserName(string userName, vector<userInfo>& users) {
 	return false;
 }
 
-bool findUserByUserNameAndPassword(string userName, vector<userInfo>& users, userInfo& user,string password) {
+bool findUserByUserNameAndPassword(string userName, vector<userInfo>& users, userInfo& user, string password) {
 	for (userInfo& u : users) {
-		if (userName == u.userName && !u.deleted&&password==u.password) {
+		if (userName == u.userName  && password == u.password) {
 			user = u;
 			return true;
 		}
 	}
 	return false;
+}
+
+bool loadUserInfo(string userName, string password, vector<userInfo>& users) {
+	if (findUserByUserNameAndPassword(userName, users, currentUser, password)) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 void showAcountDetailsByAcountNumber(vector<acountInfo>& acounts, string acountNumber) {
@@ -482,7 +491,7 @@ void showAcountDetailsByAcountNumber(vector<acountInfo>& acounts, string acountN
 }
 
 void showUserDetailsByUserName(vector<userInfo>& users, string userName) {
-	
+
 
 	if (findUserByUserName(userName, users)) {
 		cout << "The following are user details: " << endl;
@@ -532,9 +541,9 @@ void deleteAcount(string acountNumber, vector<acountInfo>& acounts) {
 	}
 }
 
-void deleteUser(string userName, vector<userInfo>&users) {
+void deleteUser(string userName, vector<userInfo>& users) {
 	char answer = 'n';
-	
+
 	if (findUserByUserName(userName, users)) {
 		printUserData(currentUser);
 		cout << "Are you sure you want delete user ?" << endl;
@@ -592,9 +601,9 @@ void updateClient(string acountNumber, vector<acountInfo>& acounts) {
 			saveVectorToFile(acounts);
 			cout << "client is updated successfully" << endl;
 		}
-	
+
 	}
-	
+
 	else {
 		cout << "client with number " << acountNumber << " is not exist" << endl;
 	}
@@ -613,12 +622,12 @@ void updateUserInfo(vector<userInfo>& users, string userName) {
 			for (userInfo& u : users) {
 				if (u.userName == userName) {
 					u = readUpdateUserInfo(userName);
-					u.permission= readPermissionsToSet();
+					u.permission = readPermissionsToSet();
 					currentUser = u;
 				}
 			}
 			saveUsersVectorToFile(users);
-			 cout << "This user updated successfully!" << endl;
+			cout << "This user updated successfully!" << endl;
 		}
 	}
 	else {
@@ -686,13 +695,13 @@ void showTotalBalances(vector<acountInfo>& acounts) {
 	cout << "Total Balances = " << totalBalances << endl;
 }
 
-void goBackToTransactionMenu(vector<acountInfo>&acounts ,vector<userInfo>&users) {
+void goBackToTransactionMenu(vector<acountInfo>& acounts, vector<userInfo>& users) {
 	cout << "Press eny key to go back transactions menu" << endl;
 	system("pause > 0");
-	showTransactionMenu(acounts,users);
+	showTransactionMenu(acounts, users);
 }
 
-void goBackMainMenu(vector<acountInfo>&acounts,vector<userInfo>&users) {
+void goBackMainMenu(vector<acountInfo>& acounts, vector<userInfo>& users) {
 
 	cout << "Press eny key to go back main menu" << endl;
 	system("pause>0");
@@ -772,10 +781,10 @@ void showAccessDenied() {
 }
 
 short readMainMenuOption() {
-	short choose=0;
+	short choose = 0;
 	cout << "choose what you want to do? [1:8]" << endl;
 	cin >> choose;
-	return choose;  
+	return choose;
 }
 
 short  readTransactionMenuOption() {
@@ -796,7 +805,7 @@ void showUserList(vector<userInfo> users) {
 	cout << "|  " << left << setw(20) << "User Name";
 	cout << "|  " << left << setw(20) << "Password";
 	cout << "|  " << left << setw(20) << "permissions" << endl;
-	
+
 	cout << endl;
 
 	if (users.size() == 0) {
@@ -812,13 +821,13 @@ void showUserList(vector<userInfo> users) {
 	}
 }
 
-void goBackToManageUserMenu(vector<userInfo>&users,vector<acountInfo>&acounts) {
+void goBackToManageUserMenu(vector<userInfo>& users, vector<acountInfo>& acounts) {
 	cout << "Press eny key to go back to Manage user menu!" << endl;
 	system("pause>0");
-	showManageUserScreen(users,acounts);
+	showManageUserScreen(users, acounts);
 }
 
-void addNewUserScreen(vector<userInfo> &users) {
+void addNewUserScreen(vector<userInfo>& users) {
 	cout << "------------------------------------------" << endl;
 	cout << "         Adding new User screen:               " << endl;
 	cout << "------------------------------------------" << endl;
@@ -832,23 +841,23 @@ void deleteUserScreen(vector<userInfo>& users) {
 	deleteUser(readUserName(), users);
 }
 
-void UpdateUserScreen(vector<userInfo>&users) {
+void UpdateUserScreen(vector<userInfo>& users) {
 	cout << "------------------------------------------" << endl;
 	cout << "      Updating User screen:               " << endl;
 	cout << "------------------------------------------" << endl;
 	updateUserInfo(users, readUserName());
 }
 
-void findUserScreen(vector<userInfo>&users) {
-	
+void findUserScreen(vector<userInfo>& users) {
+
 	cout << "------------------------------------------" << endl;
 	cout << "      finding User screen:               " << endl;
 	cout << "------------------------------------------" << endl;
 	showUserDetailsByUserName(users, readUserName());
 }
 
-void performManageUserMenuOption(enManageUserMenuOption manageUserOption, 
-	vector<acountInfo>&acounts,vector<userInfo>&users) {
+void performManageUserMenuOption(enManageUserMenuOption manageUserOption,
+	vector<acountInfo>& acounts, vector<userInfo>& users) {
 	//users = loadUsersFromFile();
 	switch (manageUserOption) {
 	case enManageUserMenuOption::enShowUserList: {
@@ -864,7 +873,7 @@ void performManageUserMenuOption(enManageUserMenuOption manageUserOption,
 		system("cls");
 
 		addNewUserScreen(users);
-		goBackToManageUserMenu(users,acounts);
+		goBackToManageUserMenu(users, acounts);
 		break;
 	}
 
@@ -872,7 +881,7 @@ void performManageUserMenuOption(enManageUserMenuOption manageUserOption,
 		system("cls");
 
 		deleteUserScreen(users);
-		goBackToManageUserMenu(users,acounts);
+		goBackToManageUserMenu(users, acounts);
 		break;
 	}
 
@@ -880,7 +889,7 @@ void performManageUserMenuOption(enManageUserMenuOption manageUserOption,
 		system("cls");
 
 		UpdateUserScreen(users);
-		goBackToManageUserMenu(users,acounts);
+		goBackToManageUserMenu(users, acounts);
 		break;
 	}
 
@@ -888,18 +897,18 @@ void performManageUserMenuOption(enManageUserMenuOption manageUserOption,
 		system("cls");
 
 		findUserScreen(users);
-		goBackToManageUserMenu(users,acounts);
+		goBackToManageUserMenu(users, acounts);
 		break;
 	}
 
 	case enManageUserMenuOption::enMainMenu: {
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 		break;
 	}
 	}
 }
 
-void showManageUserScreen(vector<userInfo> &users,vector<acountInfo>&acounts) {
+void showManageUserScreen(vector<userInfo>& users, vector<acountInfo>& acounts) {
 	system("cls");
 
 	if (!checkAccessPermission(enPermissions::enManageUsersPermission)) {
@@ -917,10 +926,10 @@ void showManageUserScreen(vector<userInfo> &users,vector<acountInfo>&acounts) {
 	cout << "[5] Find User" << endl;
 	cout << "[6] Main Menu" << endl;
 
-	performManageUserMenuOption(enManageUserMenuOption(readMangeUserMenuOption()),acounts,users);
+	performManageUserMenuOption(enManageUserMenuOption(readMangeUserMenuOption()), acounts, users);
 }
 
-void showAddNewClientScreen(vector<acountInfo>&acounts) {
+void showAddNewClientScreen(vector<acountInfo>& acounts) {
 
 	if (!checkAccessPermission(enPermissions::enAddNewClientPermission)) {
 		showAccessDenied();
@@ -973,8 +982,8 @@ void showFindClientScreen(vector<acountInfo>& acounts) {
 	showAcountDetailsByAcountNumber(acounts, readAcountNumber());
 }
 
-void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &acounts,
-	vector<userInfo>&users) {
+void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo>& acounts,
+	vector<userInfo>& users) {
 	/*vector<acountInfo> acounts;
 	acounts = loadAcountsInfoFromFile();*/
 	switch (mainMenuOption) {
@@ -984,24 +993,24 @@ void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &aco
 		system("cls");
 
 		showClientsInfo(acounts);
-			goBackMainMenu(acounts,users);
-			break;
-		}
+		goBackMainMenu(acounts, users);
+		break;
+	}
 
 	case enMenuOptions::enAddNewClientOption: {
 		system("cls");
 
 		showAddNewClientScreen(acounts);
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 		break;
 	}
 
-	case enMenuOptions::enDeleteClientOption: 
+	case enMenuOptions::enDeleteClientOption:
 	{
 		system("cls");
 
 		showDeleteScreen(acounts);
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 
 		break;
 	}
@@ -1011,7 +1020,7 @@ void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &aco
 		system("cls");
 
 		showUpdateScreen(acounts);
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 
 		break;
 	}
@@ -1021,7 +1030,7 @@ void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &aco
 		system("cls");
 
 		showFindClientScreen(acounts);
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 
 		break;
 	}
@@ -1038,7 +1047,7 @@ void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &aco
 	{
 		system("cls");
 
-		showManageUserScreen(users,acounts);
+		showManageUserScreen(users, acounts);
 		//goBackMainMenu(acounts,users);
 		break;
 	}
@@ -1056,13 +1065,13 @@ void performMainMenuOption(enMenuOptions mainMenuOption, vector<acountInfo> &aco
 }
 
 void transactionMenuPerformance(enTransactions performTransactionMenuOption,
-	vector<acountInfo>& acounts,vector<userInfo>&users) {
+	vector<acountInfo>& acounts, vector<userInfo>& users) {
 	switch (performTransactionMenuOption) {
 	case enTransactions::enDeposite:
 	{
 		system("cls");
 		deposite(acounts);
-		goBackToTransactionMenu(acounts,users);
+		goBackToTransactionMenu(acounts, users);
 		break;
 	}
 
@@ -1071,7 +1080,7 @@ void transactionMenuPerformance(enTransactions performTransactionMenuOption,
 		system("cls");
 
 		withdrawPerformance(acounts);
-		goBackToTransactionMenu(acounts,users);
+		goBackToTransactionMenu(acounts, users);
 		break;
 	}
 
@@ -1080,7 +1089,7 @@ void transactionMenuPerformance(enTransactions performTransactionMenuOption,
 		system("cls");
 
 		showTotalBalances(acounts);
-		goBackToTransactionMenu(acounts,users);
+		goBackToTransactionMenu(acounts, users);
 		break;
 	}
 
@@ -1091,13 +1100,13 @@ void transactionMenuPerformance(enTransactions performTransactionMenuOption,
 	}
 }
 
-void showTransactionMenu(vector<acountInfo> &acounts,vector<userInfo>&users) {
+void showTransactionMenu(vector<acountInfo>& acounts, vector<userInfo>& users) {
 
 	system("cls");
 
 	if (!checkAccessPermission(enPermissions::enShowTransactionMenuPermission)) {
 		showAccessDenied();
-		goBackMainMenu(acounts,users);
+		goBackMainMenu(acounts, users);
 		return;
 	}
 
@@ -1108,18 +1117,18 @@ void showTransactionMenu(vector<acountInfo> &acounts,vector<userInfo>&users) {
 	cout << "[2] Withdraw." << endl;
 	cout << "[3] Total Balance." << endl;
 	cout << "[4] Main Menu." << endl;
-	transactionMenuPerformance(enTransactions(readTransactionMenuOption()), acounts,users);
+	transactionMenuPerformance(enTransactions(readTransactionMenuOption()), acounts, users);
 }
 
 
-bool loadCurrentUserInfo(string userName, string password,vector<userInfo>&users) {
+bool loadCurrentUserInfo(string userName, string password, vector<userInfo>& users) {
 	if (findUserByUserNameAndPassword(userName, users, currentUser, password)) {
 		return true;
 	}
 	return false;
 }
 
-void showMainMenu(vector<acountInfo>&acounts,vector<userInfo>&users) {
+void showMainMenu(vector<acountInfo>& acounts, vector<userInfo>& users) {
 
 	system("cls");
 
@@ -1135,10 +1144,10 @@ void showMainMenu(vector<acountInfo>&acounts,vector<userInfo>&users) {
 	cout << "[7] Manage User" << endl;
 	cout << "[8] Logout  " << endl;
 	cout << "---------------------------------------------------" << endl;
-	performMainMenuOption(enMenuOptions(readMainMenuOption()),acounts,users);
+	performMainMenuOption(enMenuOptions(readMainMenuOption()), acounts, users);
 }
 
-void login(vector<acountInfo>&acounts, vector<userInfo>&users) {
+void login(vector<acountInfo>& acounts, vector<userInfo>& users) {
 
 	bool loginFailed = false;
 	string userName, password;
@@ -1153,40 +1162,24 @@ void login(vector<acountInfo>&acounts, vector<userInfo>&users) {
 		}
 
 		cout << "Enter username?" << endl;
-		cin >> userName;
+		getline(cin >> ws, userName);
 
 		cout << "Enter password?" << endl;
-		cin >> password;
+		getline(cin >> ws, password);
 
-		loginFailed = !findUserByUserNameAndPassword(userName, users, currentUser, password);
+		loginFailed = !loadUserInfo(userName, password, users);
 	} while (loginFailed);
 
-	
-	showMainMenu(acounts,users);
-	}
 
-void ensureDefaultAdminExists(vector<userInfo>& users) {
-	if (users.size() == 0) {
-		userInfo admin;
-		admin.userName = "admin";
-		admin.password = "admin";
-		admin.permission = enPermissions::all; // full access
-		admin.deleted = false;
-		users.push_back(admin);
-		saveUsersVectorToFile(users);
-		
-	}
+	showMainMenu(acounts, users);
 }
-
 
 int main() {
 	
 	vector<acountInfo>acounts = loadAcountsInfoFromFile();
 	vector<userInfo>users = loadUsersFromFile();
 
-	ensureDefaultAdminExists(users);
-	
 	login(acounts, users);
-	
+
 	return 0;
 }
