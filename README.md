@@ -1,24 +1,69 @@
-# Bank Management
+Bank Management
 
-## 📌 Overview
-This is a simple **Bank Management project** developed in **C++** using functions and file handling.  
-It allows adding new clients, updating their information, deleting accounts, depositing and withdrawing money, and displaying client details.
+📌 Overview
+This is a simple Bank Management project developed in C++ using functions and file handling.
+The project allows managing client accounts such as adding, updating, deleting, depositing, withdrawing, and displaying client details.
 
----
+There are two versions of the code in this repository:
 
-## 🚀 Features
-- Add a new client  
-- Update client information  
-- Delete an existing account  
-- Deposit money into an account  
-- Withdraw money from an account  
-- Show all client details  
+Version 1 (Original): Basic functionality with client management.
 
----
+Version 2 (Updated): Improved and extended version with user management and bug fixes.
 
-## 🛠️ Technologies Used
-- C++  
-- Functions  
-- File Handling  
+🚀 Features
 
----
+✅ Original Version
+
+Add a new client
+
+Update client information
+
+Delete an existing account
+
+Deposit money into an account
+
+Withdraw money from an account
+
+Show all client details
+
+🔥 New Updates (Version 2)
+
+Added user management system (admin and user accounts).
+
+Implemented permissions (restrict normal users, allow admins full control).
+
+Added functions to find, update, and delete users.
+
+Improved findUserByUserName function to properly update currentUser.
+
+Enhanced error handling and fixed issues where deleted users were still being accessed.
+
+Updated README file for better documentation.
+
+🛠️ Technologies Used
+
+C++
+
+Functions
+
+File Handling
+
+▶️ How to Run
+
+Clone this repository:
+
+git clone https://github.com/your-username/Bank-Management.git
+cd Bank-Management
+
+
+Compile the code (using g++):
+
+g++ main.cpp -o bank
+
+
+Run the program:
+
+./bank
+
+
+Follow the on-screen menu to manage clients and users.
