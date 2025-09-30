@@ -1,44 +1,43 @@
-Bank Management
-
+💳 Bank Management System
 📌 Overview
-This is a simple Bank Management project developed in C++ using functions and file handling.
+
+This is a simple Bank Management System developed in C++ using functions and file handling.
 The project allows managing client accounts such as adding, updating, deleting, depositing, withdrawing, and displaying client details.
 
-There are two versions of the code in this repository:
+There are two versions of the project in this repository:
 
-Version 1 (Original): Basic functionality with client management.
+Version 1 (Original): Basic client management features.
 
-Version 2 (Updated): Improved and extended version with user management and bug fixes.
+Version 2 (Updated): Extended functionality with user management and bug fixes.
 
 🚀 Features
-
 ✅ Original Version
 
-Add a new client
+➕ Add a new client
 
-Update client information
+✏️ Update client information
 
-Delete an existing account
+❌ Delete an existing account
 
-Deposit money into an account
+💰 Deposit money into an account
 
-Withdraw money from an account
+💸 Withdraw money from an account
 
-Show all client details
+📋 Show all client details
 
 🔥 New Updates (Version 2)
 
-Added user management system (admin and user accounts).
+👤 Added user management system (admin and normal users).
 
-Implemented permissions (restrict normal users, allow admins full control).
+🔑 Implemented permissions (admins have full control, normal users restricted).
 
-Added functions to find, update, and delete users.
+📝 Added functions to find, update, and delete users.
 
-Improved findUserByUserName function to properly update currentUser.
+🛠️ Improved findUserByUserName function to properly update currentUser.
 
-Enhanced error handling and fixed issues where deleted users were still being accessed.
+🐛 Fixed bugs where deleted users were still being accessed.
 
-Updated README file for better documentation.
+📖 Updated README file for better documentation.
 
 🛠️ Technologies Used
 
@@ -49,3 +48,6 @@ Functions
 File Handling
 
 
+
+
+Follow the on-screen menu to manage clients and users.
